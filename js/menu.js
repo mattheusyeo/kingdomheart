@@ -29,4 +29,24 @@
       });
     }
   }
+
+  // Page transition: fade the page out, then go to the next page.
+  var LEAVE_MS = 250;
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href]');
+    if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if (a.target && a.target !== '_self') return;
+    if (!/^(https?|file):$/.test(a.protocol)) return;               // mailto:, tel: ...
+    if (a.origin !== window.location.origin) return;                 // other websites
+    var samePage = a.pathname === window.location.pathname && a.search === window.location.search;
+    if (samePage && a.hash) return;                                  // jump within this page
+    e.preventDefault();
+    if (samePage) { setOpen(false); return; }                        // already here
+    document.documentElement.classList.add('is-leaving');
+    setTimeout(function () { window.location.href = a.href; }, LEAVE_MS);
+  });
+  // Coming back with the browser's Back button: show the page again.
+  window.addEventListener('pageshow', function (e) {
+    if (e.persisted) document.documentElement.classList.remove('is-leaving');
+  });
 })();

@@ -408,14 +408,15 @@ ol { list-style: none; }
     display: block;
     height: 2px;
     background: var(--headline);
-    transition: transform 0.2s, opacity 0.2s;
+    transition: transform 0.28s ease, opacity 0.2s ease;
   }
   .nav.open .menu-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
   .nav.open .menu-toggle span:nth-child(2) { opacity: 0; }
   .nav.open .menu-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
+  /* dropdown: fades and slides down; links follow one after another */
   .nav-items {
-    display: none;
+    display: flex;
     position: absolute;
     top: 100%; left: 0; right: 0;
     flex-direction: column;
@@ -425,9 +426,31 @@ ol { list-style: none; }
     border-bottom: 1px solid var(--divider);
     font-size: 14px;
     letter-spacing: 0.02em;
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.28s ease, transform 0.28s ease, visibility 0s linear 0.28s;
   }
-  .nav.open .nav-items { display: flex; }
-  .nav-items a { padding: 16px 0; border-bottom: 1px solid #e4e4e4; }
+  .nav.open .nav-items {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    transition-delay: 0s;
+  }
+  .nav-items a {
+    padding: 16px 0;
+    border-bottom: 1px solid #e4e4e4;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .nav.open .nav-items a { opacity: 1; transform: none; }
+  .nav.open .nav-items a:nth-child(1) { transition-delay: 0.05s; }
+  .nav.open .nav-items a:nth-child(2) { transition-delay: 0.10s; }
+  .nav.open .nav-items a:nth-child(3) { transition-delay: 0.15s; }
+  .nav.open .nav-items a:nth-child(4) { transition-delay: 0.20s; }
   .nav-items a:last-child { border-bottom: 0; }
 
   .intro { padding: 100px 40px; }
@@ -478,4 +501,22 @@ ol { list-style: none; }
   .footer-card { padding-top: 260px; }
   .monogram { font-size: 72px; }
   .footer-row { font-size: 18px; }
+}
+
+/* ---------- Page transitions ---------- */
+/* Everything except the menu bar fades in on arrival and fades out when a page link is clicked,
+   so the logo and menu stay put while the page changes. */
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+body > :not(.nav):not(script) { animation: page-in 0.45s ease backwards; }
+body > :not(.nav):not(script) { transition: opacity 0.25s ease, transform 0.25s ease; }
+html.is-leaving body > :not(.nav):not(script) { opacity: 0; transform: translateY(-6px); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  body > :not(.nav):not(script) { animation: none; transition: none; }
+  html.is-leaving body > :not(.nav):not(script) { transform: none; }
+  .nav-items, .nav-items a, .menu-toggle span { transition: none !important; }
 }
