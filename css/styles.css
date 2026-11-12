@@ -306,30 +306,13 @@ ol { list-style: none; }
   letter-spacing: -0.01em;
 }
 
-/* ---------- Tablet ---------- */
-/* Logo on top with the separator under it, then the menu row, then the photo. */
+/* ---------- Tablet + phone ---------- */
+/* The menu collapses into a dropdown opened by the three-stripe button (top right). */
 @media (max-width: 1000px) {
-  html { scroll-padding-top: 150px; }
+  html { scroll-padding-top: 100px; }
   .nav { flex-direction: column; align-items: stretch; height: auto; border-bottom: 0; }
   .nav-bar { height: 82px; border-bottom: 1px solid var(--divider); }
-  .nav-items { justify-content: space-between; padding: 16px 0 14px; }
-  .header { padding-top: 190px; }
-  .intro { padding: 100px 40px; }
-  .intro-cta { padding-top: 140px; padding-bottom: 140px; }
-  .intro-title { font-size: 34px; }
-  .title h2, .number, .service-text h3 { font-size: 40px; }
-  .hero { height: 460px; }
-}
 
-/* ---------- Mobile ---------- */
-@media (max-width: 600px) {
-  body { padding: 0 16px; }
-  html { scroll-padding-top: 80px; }
-  .nav { left: 16px; right: 16px; }
-  .nav-bar { height: 64px; border-bottom: 1px solid var(--divider); }
-  .logo { font-size: 22px; letter-spacing: 0.08em; }
-
-  /* three-stripe button (top right) */
   .menu-toggle {
     display: flex;
     flex-direction: column;
@@ -352,7 +335,6 @@ ol { list-style: none; }
   .nav.open .menu-toggle span:nth-child(2) { opacity: 0; }
   .nav.open .menu-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-  /* dropdown with the menu options */
   .nav-items {
     display: none;
     position: absolute;
@@ -368,8 +350,22 @@ ol { list-style: none; }
   .nav.open .nav-items { display: flex; }
   .nav-items a { padding: 16px 0; border-bottom: 1px solid #e4e4e4; }
   .nav-items a:last-child { border-bottom: 0; }
+
+  .intro { padding: 100px 40px; }
+  .intro-cta { padding-top: 140px; padding-bottom: 140px; }
+  .intro-title { font-size: 34px; }
+  .title h2, .number, .service-text h3 { font-size: 40px; }
+  .hero { height: 460px; }
+}
+
+/* ---------- Phone ---------- */
+@media (max-width: 600px) {
+  body { padding: 0 16px; }
+  html { scroll-padding-top: 80px; }
+  .nav { left: 16px; right: 16px; }
+  .nav-bar { height: 64px; }
+  .logo { font-size: 22px; letter-spacing: 0.08em; }
   .header { padding: 100px 0 0; }
-  html { scroll-padding-top: 110px; }
   .hero { height: 380px; }
   .sticker { width: 150px; height: 150px; }
   .sticker-outline { width: 132px; height: 132px; }
