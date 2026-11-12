@@ -6,32 +6,110 @@
   <title>Kingdomheart</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Cinzel:wght@500&family=Outfit:wght@400;500;700&display=swap">
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-top">
-      <a href="/" class="logo">KINGDOMHEART</a>
+  <nav class="nav" aria-label="Main">
+    <a href="#top" class="logo">Kingdomheart</a>
+    <div class="nav-items">
+      <a href="#gallery">Gallery</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
 
-      <form class="search" role="search" action="#" onsubmit="return false;">
-        <input type="search" name="q" placeholder="What are you looking for?" aria-label="Search">
-        <button type="submit" aria-label="Submit search">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-            <circle cx="10" cy="10" r="7"></circle>
-            <line x1="15.2" y1="15.2" x2="22" y2="22"></line>
-          </svg>
-        </button>
-      </form>
+  <header class="header" id="top">
+    <div class="hero">
+      <img class="hero-img" src="assets/hero.jpg" alt="Rose">
+      <div class="sticker">
+        <img class="sticker-outline" src="assets/badge-outline.svg" alt="Special offer badge">
+        <div class="sticker-text">
+          <p class="sticker-label">New</p>
+          <p class="sticker-offer">10% Off Your First Order</p>
+          <p class="sticker-label sticker-label-sm">Special</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro" id="about">
+      <div class="intro-content">
+        <h2 class="eyebrow">Who We Are</h2>
+        <p class="intro-title">We're Kingdomheart® and we're here to help you find your floral story.</p>
+      </div>
+      <a class="button" href="#about"><img src="assets/dot.svg" alt="" width="4" height="4">About us</a>
+    </section>
+
+    <section class="carousel" id="gallery" aria-label="Gallery">
+      <img src="assets/carousel-1.jpg" alt="Pink roses - image 1 out of 5">
+      <img src="assets/carousel-2.jpg" alt="White rose - image 2 out of 5">
+      <img src="assets/carousel-3.jpg" alt="Pink roses - image 3 out of 5">
+      <img src="assets/carousel-4.jpg" alt="White tulips - image 4 out of 5">
+      <img src="assets/carousel-5.jpg" alt="Orchid - image 5 out of 5">
+    </section>
+
+    <div class="title">
+      <h2>What We Do</h2>
+      <p>We bring a touch of that simple magic into your world.</p>
+      <img class="divider" src="assets/divider-1.svg" alt="" role="presentation">
     </div>
 
-    <nav class="main-nav" aria-label="Main">
-      <ul>
-        <li><a href="#lifestyle">Lifestyle</a></li>
-        <li><a href="#skincare">Skincare</a></li>
-        <li><a href="#accessories">Accessories</a></li>
-      </ul>
-    </nav>
-  </header>
+    <ol class="services">
+      <li>
+        <p class="number">1</p>
+        <img class="service-img" src="assets/service-1.jpg" alt="Person with Bouquette of flowers">
+        <div class="service-text">
+          <h3>Floral Installations</h3>
+          <p>Living art for homes, businesses, and events.</p>
+        </div>
+        <img class="divider" src="assets/divider-2.svg" alt="" role="presentation">
+      </li>
+      <li>
+        <p class="number">2</p>
+        <img class="service-img service-img-sm" src="assets/service-2.jpg" alt="Person making a Bouquette of flowers">
+        <div class="service-text">
+          <h3>Native Plant Arrangements</h3>
+          <p>Whether it’s a private retreat or a public space, we craft floral experiences that bloom beyond expectations.</p>
+        </div>
+        <img class="divider" src="assets/divider-2.svg" alt="" role="presentation">
+      </li>
+      <li>
+        <p class="number">3</p>
+        <span class="service-img service-img-tint"><img src="assets/service-3.jpg" alt="Pink tulips"></span>
+        <div class="service-text">
+          <h3>Custom Floral Concepts</h3>
+          <p>Your vision, our blooms. We build arrangements that are both personal and exquisitely simple. Whether it’s a private retreat or a public space, we craft floral experiences that bloom beyond expectations.</p>
+        </div>
+        <img class="divider" src="assets/divider-2.svg" alt="" role="presentation">
+      </li>
+    </ol>
+
+    <div class="feature">
+      <img src="assets/feature.jpg" alt="Purple flowers">
+    </div>
+
+    <section class="intro intro-cta">
+      <div class="intro-content">
+        <h2 class="eyebrow">Work with us</h2>
+        <h3 class="intro-title">Discover how we can add a touch of natural beauty to your next event.</h3>
+      </div>
+      <a class="button" href="#contact"><img src="assets/dot.svg" alt="" width="4" height="4">About us</a>
+    </section>
+  </main>
+
+  <footer class="footer" id="contact">
+    <div class="footer-card">
+      <img class="footer-img" src="assets/footer.jpg" alt="Orange flower">
+      <div class="footer-inner">
+        <p class="monogram">KH.</p>
+        <div class="footer-row">
+          <p>Miami, FL</p>
+          <a href="mailto:hello@example.com">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
