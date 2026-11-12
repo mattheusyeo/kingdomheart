@@ -306,6 +306,85 @@ ol { list-style: none; }
   letter-spacing: -0.01em;
 }
 
+/* ---------- Gallery page ---------- */
+.nav-items a.active { text-decoration: underline; text-underline-offset: 6px; }
+
+.page-header {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 126px 0 80px;
+}
+.page-header h1 {
+  font-weight: 700; font-size: 50px; line-height: 1.1;
+  letter-spacing: -0.02em; text-transform: uppercase;
+  color: var(--headline);
+}
+
+.g-section {
+  max-width: 1500px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+.g-label {
+  flex: 0 0 170px;
+  font-weight: 700; font-size: 14px; line-height: 1.4;
+  letter-spacing: 0.02em; text-transform: uppercase;
+  color: var(--caption);
+}
+.g-label-dark { flex-basis: 204px; color: var(--body); }
+
+.g-collection { padding-bottom: 100px; }
+.g-grid {
+  flex: 1;
+  min-width: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
+  gap: 60px 20px;
+}
+.g-item { display: flex; flex-direction: column; gap: 15px; }
+.g-info {
+  display: flex; align-items: center; gap: 6px;
+  font-weight: 700; line-height: 1.4; white-space: nowrap;
+}
+.g-name { font-size: 18px; text-transform: uppercase; color: var(--body); }
+.g-price { font-size: 15px; letter-spacing: -0.025em; color: rgba(0, 0, 0, 0.6); }
+
+.g-img { position: relative; border-radius: var(--radius); overflow: hidden; aspect-ratio: 330 / 318; }
+.g-img img, .g-module-img img { width: 100%; height: 100%; object-fit: cover; }
+.g-tint::after {
+  content: ""; position: absolute; inset: 0;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.g-services { padding-top: 100px; }
+.g-services-list { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 40px; }
+.g-module {
+  display: flex; align-items: flex-start; gap: 20px;
+  padding: 30px 0;
+  border-top: 1px solid var(--divider);
+}
+.g-module-text { flex: 1; min-width: 0; max-width: 500px; display: flex; flex-direction: column; gap: 24px; }
+.g-module h3 {
+  font-weight: 700; font-size: 50px; line-height: 1.1;
+  letter-spacing: -0.02em; text-transform: uppercase;
+  color: var(--headline);
+}
+.g-module p { font-size: 17px; line-height: 1.4; letter-spacing: -0.025em; }
+.g-module-img {
+  position: relative;
+  flex: 1; min-width: 0;
+  aspect-ratio: 488 / 421;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.g-module-img-sm { border-radius: 15px; }
+
+.intro-narrow { padding: 150px 40px; }
+.intro-narrow .intro-content { width: 400px; }
+
 /* ---------- Tablet + phone ---------- */
 /* The menu collapses into a dropdown opened by the three-stripe button (top right). */
 @media (max-width: 1000px) {
@@ -354,8 +433,12 @@ ol { list-style: none; }
   .intro { padding: 100px 40px; }
   .intro-cta { padding-top: 140px; padding-bottom: 140px; }
   .intro-title { font-size: 34px; }
-  .title h2, .number, .service-text h3 { font-size: 40px; }
+  .title h2, .number, .service-text h3, .g-module h3 { font-size: 40px; }
   .hero { height: 460px; }
+  .g-section { flex-direction: column; gap: 24px; }
+  .g-label, .g-label-dark { flex-basis: auto; }
+  .g-services { padding-top: 60px; }
+  .intro-narrow { padding: 100px 40px; }
 }
 
 /* ---------- Phone ---------- */
@@ -379,7 +462,15 @@ ol { list-style: none; }
   .carousel { padding: 0 16px 50px; }
   .carousel img { flex-basis: 220px; width: 220px; height: 220px; }
   .title { gap: 24px; }
-  .title h2, .number, .service-text h3 { font-size: 30px; }
+  .title h2, .number, .service-text h3, .g-module h3 { font-size: 30px; }
+  .page-header { padding: 100px 0 40px; }
+  .page-header h1 { font-size: 36px; }
+  .g-collection { padding-bottom: 60px; }
+  .g-grid { gap: 40px 16px; }
+  .g-module { flex-direction: column; gap: 24px; }
+  .g-module-text, .g-module-img { flex: none; width: 100%; max-width: none; }
+  .intro-narrow { padding: 70px 8px; }
+  .intro-narrow .intro-content { width: 100%; }
   .services { padding: 60px 0; }
   .services li { gap: 40px; }
   .service-text { gap: 20px; }

@@ -18,9 +18,9 @@
       </button>
     </div>
     <nav class="nav-items" id="menu" aria-label="Main">
-      <a href="#gallery">Lifestyle</a>
-      <a href="#about">Stationery</a>
-      <a href="#accessories">Accessories</a>
+      <a href="gallery.html?category=lifestyle">Lifestyle</a>
+      <a href="gallery.html?category=stationery">Stationery</a>
+      <a href="gallery.html?category=accessories">Accessories</a>
       <a href="#contact">Contact</a>
     </nav>
   </header>
@@ -118,22 +118,6 @@
     </div>
   </footer>
 
-  <script>
-    // Phone menu: the three-stripe button opens and closes the dropdown.
-    (function () {
-      var nav = document.getElementById('nav');
-      var btn = nav.querySelector('.menu-toggle');
-      function setOpen(open) {
-        nav.classList.toggle('open', open);
-        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-      }
-      btn.addEventListener('click', function () { setOpen(!nav.classList.contains('open')); });
-      nav.querySelectorAll('.nav-items a').forEach(function (a) {
-        a.addEventListener('click', function () { setOpen(false); });
-      });
-      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
-    })();
-  </script>
+  <script src="js/menu.js"></script>
 </body>
 </html>
