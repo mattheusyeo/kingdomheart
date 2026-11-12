@@ -10,15 +10,20 @@
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <nav class="nav" aria-label="Main">
-    <a href="#top" class="logo">Kingdomheart</a>
-    <div class="nav-items">
+  <header class="nav" id="nav">
+    <div class="nav-bar">
+      <a href="#top" class="logo">Kingdomheart</a>
+      <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav class="nav-items" id="menu" aria-label="Main">
       <a href="#gallery">Lifestyle</a>
       <a href="#about">Skincare</a>
       <a href="#accessories">Accessories</a>
       <a href="#contact">Contact</a>
-    </div>
-  </nav>
+    </nav>
+  </header>
 
   <header class="header" id="top">
     <div class="hero">
@@ -112,5 +117,23 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    // Phone menu: the three-stripe button opens and closes the dropdown.
+    (function () {
+      var nav = document.getElementById('nav');
+      var btn = nav.querySelector('.menu-toggle');
+      function setOpen(open) {
+        nav.classList.toggle('open', open);
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      }
+      btn.addEventListener('click', function () { setOpen(!nav.classList.contains('open')); });
+      nav.querySelectorAll('.nav-items a').forEach(function (a) {
+        a.addEventListener('click', function () { setOpen(false); });
+      });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+    })();
+  </script>
 </body>
 </html>
