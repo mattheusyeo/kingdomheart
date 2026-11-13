@@ -13,6 +13,10 @@
   <header class="nav" id="nav">
     <div class="nav-bar">
       <a href="index.html" class="logo">Kingdomheart</a>
+      <a href="cart.html" class="cart-link" aria-label="Cart, empty">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6L5 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+        <span class="cart-count" hidden>0</span>
+      </a>
       <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
         <span></span><span></span><span></span>
       </button>
@@ -36,38 +40,47 @@
         <li class="g-item">
           <div class="g-info"><p class="g-name">Dawn Bloom</p><p class="g-price">$55/Bunch</p></div>
           <div class="g-img"><img src="assets/gallery-1.jpg" alt="Sun flowers" loading="lazy"></div>
+          <button class="button g-add" type="button" data-add-to-cart="dawn-bloom"><img src="assets/dot.svg" alt="" width="4" height="4">Add to cart</button>
         </li>
         <li class="g-item">
           <div class="g-info"><p class="g-name">Solstice Stems</p><p class="g-price">$30/Bunch</p></div>
           <div class="g-img"><img src="assets/gallery-2.jpg" alt="Bouquette of lilies and carnations" loading="lazy"></div>
+          <button class="button g-add" type="button" data-add-to-cart="solstice-stems"><img src="assets/dot.svg" alt="" width="4" height="4">Add to cart</button>
         </li>
         <li class="g-item">
           <div class="g-info"><p class="g-name">Whisper Greens</p><p class="g-price">$120/Bunch</p></div>
           <div class="g-img"><img src="assets/gallery-3.jpg" alt="Bouquette of tulips" loading="lazy"></div>
+          <button class="button g-add" type="button" data-add-to-cart="whisper-greens"><img src="assets/dot.svg" alt="" width="4" height="4">Add to cart</button>
         </li>
         <li class="g-item">
           <div class="g-info"><p class="g-name">Clarity Petals</p><p class="g-price">$55/Bunch</p></div>
           <div class="g-img"><img src="assets/carousel-3.jpg" alt="Pink flowers" loading="lazy"></div>
+          <button class="button g-add" type="button" data-add-to-cart="clarity-petals"><img src="assets/dot.svg" alt="" width="4" height="4">Add to cart</button>
         </li>
         <li class="g-item">
           <div class="g-info"><p class="g-name">River Stone</p><p class="g-price">$30/Bunch</p></div>
           <div class="g-img"><img src="assets/carousel-1.jpg" alt="Bouquette of peonies" loading="lazy"></div>
+          <button class="button g-add" type="button" data-add-to-cart="river-stone"><img src="assets/dot.svg" alt="" width="4" height="4">Add to cart</button>
         </li>
         <li class="g-item">
           <div class="g-info"><p class="g-name">Moonlit Meadow</p><p class="g-price">$120/Bunch</p></div>
           <div class="g-img"><img src="assets/gallery-2.jpg" alt="Bouquette of lilies and carnations" loading="lazy"></div>
+          <button class="button g-add" type="button" data-add-to-cart="moonlit-meadow"><img src="assets/dot.svg" alt="" width="4" height="4">Add to cart</button>
         </li>
         <li class="g-item">
           <div class="g-info"><p class="g-name">Ember Leaf</p><p class="g-price">$55/Bunch</p></div>
           <div class="g-img"><img src="assets/carousel-4.jpg" alt="White tulips" loading="lazy"></div>
+          <button class="button g-add" type="button" data-add-to-cart="ember-leaf"><img src="assets/dot.svg" alt="" width="4" height="4">Add to cart</button>
         </li>
         <li class="g-item">
           <div class="g-info"><p class="g-name">Skyline Bloom</p><p class="g-price">$75/Bunch</p></div>
           <div class="g-img"><img src="assets/gallery-4.jpg" alt="Purple flower" loading="lazy"></div>
+          <button class="button g-add" type="button" data-add-to-cart="skyline-bloom"><img src="assets/dot.svg" alt="" width="4" height="4">Add to cart</button>
         </li>
         <li class="g-item">
           <div class="g-info"><p class="g-name">Still Waters</p><p class="g-price">$250/Bunch</p></div>
           <div class="g-img g-tint"><img src="assets/service-3.jpg" alt="Pink tulip" loading="lazy"></div>
+          <button class="button g-add" type="button" data-add-to-cart="still-waters"><img src="assets/dot.svg" alt="" width="4" height="4">Add to cart</button>
         </li>
       </ul>
     </section>
@@ -121,6 +134,7 @@
     </div>
   </footer>
 
+  <script src="js/cart.js"></script>
   <script src="js/menu.js"></script>
 </body>
 </html>

@@ -1,0 +1,9 @@
+{
+  "name": "kingdomheart",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/functions.test.js",
+    "dev": "npx wrangler pages dev . --compatibility-date=2024-09-23"
+  }
+}
