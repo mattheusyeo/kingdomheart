@@ -40,7 +40,7 @@ Everything about products and shipping is in **`data/products.json`**, and the G
 
 To add a product: save its photo in `assets/`, then add a line to `products` in `data/products.json`.
 
-> **Empty tabs:** a tab with no products (currently Accessories) shows "New products are coming soon." Add a product with that tab in its `categories` and it appears automatically.
+> **Empty tabs:** a tab with no products (none right now) shows "New products are coming soon." Add a product with that tab in its `categories` and it appears automatically.
 
 ## Setting up Stripe (test mode first)
 
