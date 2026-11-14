@@ -1,11 +1,12 @@
 // Home page banner: cycles through the products that have a `banner` in data/products.json.
-// Pauses when the mouse is over it, when something inside has keyboard focus, or when the tab is hidden.
+// Left and right arrow buttons (and swipe or the arrow keys) change slides. Pauses when the mouse is over it, when something inside has keyboard focus, or when the tab is hidden.
 // Visitors who prefer reduced motion get no automatic cycling (they can still use the dots or swipe).
 (function () {
   var slidesBox = document.getElementById('hero-slides');
-  var dotsBox = document.getElementById('hero-dots');
+  var prevBtn = document.getElementById('hero-prev');
+  var nextBtn = document.getElementById('hero-next');
   var hero = document.getElementById('hero');
-  if (!slidesBox || !dotsBox || !hero) return;
+  if (!slidesBox || !prevBtn || !nextBtn || !hero) return;
 
   var INTERVAL = 5500;
   var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -29,7 +30,7 @@
       if (!products.length) return;   // keep the static first slide
 
       slidesBox.textContent = '';
-      var slides = [], dots = [], current = 0, timer = null, hovering = false;
+      var slides = [], current = 0, timer = null, hovering = false;
 
       products.forEach(function (p, i) {
         var b = p.banner;
@@ -67,15 +68,6 @@
 
         slidesBox.appendChild(a);
         slides.push(a);
-
-        if (products.length > 1) {
-          var dot = el('button', 'hero-dot');
-          dot.type = 'button';
-          dot.setAttribute('aria-label', 'Show ' + p.name);
-          dot.addEventListener('click', function () { show(i); restart(); });
-          dotsBox.appendChild(dot);
-          dots.push(dot);
-        }
       });
 
       function show(n) {
@@ -86,7 +78,6 @@
           s.setAttribute('aria-hidden', on ? 'false' : 'true');
           if (on) s.removeAttribute('inert'); else s.setAttribute('inert', '');
         });
-        dots.forEach(function (d, i) { d.setAttribute('aria-current', i === current ? 'true' : 'false'); });
       }
       function stop() { if (timer) { clearInterval(timer); timer = null; } }
       function start() {
@@ -98,6 +89,9 @@
 
       show(0);
       if (slides.length < 2) return;
+      prevBtn.hidden = false; nextBtn.hidden = false;
+      prevBtn.addEventListener('click', function () { show(current - 1); restart(); });
+      nextBtn.addEventListener('click', function () { show(current + 1); restart(); });
       hero.setAttribute('aria-live', 'off');   // do not read out every automatic change
       hero.addEventListener('mouseenter', function () { hovering = true; stop(); });
       hero.addEventListener('mouseleave', function () { hovering = false; start(); });
