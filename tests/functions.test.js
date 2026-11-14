@@ -305,11 +305,11 @@ test('home page banner: every banner photo exists and the order is candle, flora
   }
 });
 
-test('the steamed bun keychain is in accessories at $9.95 with four colours', () => {
+test('the steamed bun keychain is in accessories at $9.95 with five colours', () => {
   const p = catalog.products.find((x) => x.id === 'steamed-bun-keychain');
   assert.equal(p.price, 995);
   assert.deepEqual(p.categories, ['accessories']);
-  assert.deepEqual(p.options.values.map((v) => v.id), ['white', 'yellow', 'pink', 'blue']);
+  assert.deepEqual(p.options.values.map((v) => v.id), ['yellow', 'pink', 'white', 'purple', 'green']);
   assert.equal(priceCart(catalog, [{ id: p.id, option: 'pink', qty: 1 }]).lines[0].unitAmount, 995);
   assert.ok(priceCart(catalog, [{ id: p.id, qty: 1 }]).error, 'a colour must be chosen');
 });
