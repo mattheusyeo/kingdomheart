@@ -37,16 +37,19 @@ export async function onRequestPost({ request, env }) {
     mode: 'payment',
     success_url: `${origin}/success.html?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/cart.html?canceled=1`,
-    line_items: priced.lines.map(({ product, qty }) => ({
+    line_items: priced.lines.map(({ product, option, qty, unitAmount }) => ({
       quantity: qty,
       price_data: {
         currency: catalog.currency,
-        unit_amount: product.price, // cents, always taken from the server's list
+        unit_amount: unitAmount, // cents, always taken from the server's list
         product_data: {
-          name: product.name,
-          metadata: { sku: product.id }, // read back by the webhook to know what to order
+          name: option ? `${product.name} (${option.name})` : product.name,
+          // read back by the webhook to know what to order from the supplier
+          metadata: { sku: product.id, option: option ? option.id : undefined },
           // Stripe can only fetch images from a public https address
-          images: origin.startsWith('https://') ? [new URL(product.image, `${origin}/`).href] : undefined,
+          images: origin.startsWith('https://')
+            ? [new URL((option && (option.thumb || option.image)) || product.image, `${origin}/`).href]
+            : undefined,
         },
       },
     })),

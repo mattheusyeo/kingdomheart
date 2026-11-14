@@ -61,6 +61,17 @@ test('products.json is well formed', () => {
     assert.ok(p.categories.length > 0 && p.categories.every((c) => ['lifestyle', 'stationery', 'accessories'].includes(c)), `${p.id} needs valid categories`);
     assert.ok(p.alt && p.image, `${p.id} needs an image and alt text`);
   }
+  for (const p of catalog.products.filter((x) => x.options)) {
+    assert.ok(p.options.label && p.options.values.length > 0, `${p.id}: options need a label and values`);
+    const optionIds = new Set();
+    for (const v of p.options.values) {
+      assert.match(v.id, /^[a-z0-9-]+$/);
+      assert.ok(!optionIds.has(v.id), `${p.id}: option ${v.id} duplicated`);
+      optionIds.add(v.id);
+      assert.ok(v.name && v.image, `${p.id}/${v.id} needs a name and image`);
+      for (const f of [v.image, v.thumb].filter(Boolean)) assert.ok(existsSync(new URL(`../${f}`, import.meta.url)), `${p.id}/${v.id}: missing file ${f}`);
+    }
+  }
   for (const c of ['lifestyle', 'stationery', 'accessories']) {
     assert.ok(catalog.products.some((p) => p.categories.includes(c)), `${c} tab would be empty`);
   }
@@ -187,7 +198,7 @@ test('webhook turns a paid session into a saved order, and only once', async () 
   const saved = JSON.parse(store.m.get('order:cs_test_paid'));
   assert.equal(saved.customer.email, 'buyer@example.com');
   assert.equal(saved.shipping.postalCode, '2000');
-  assert.deepEqual(saved.items, [{ sku: 'dawn-bloom', name: 'Dawn Bloom', quantity: 2, unitAmount: 5500, total: 11000 }]);
+  assert.deepEqual(saved.items, [{ sku: 'dawn-bloom', option: null, name: 'Dawn Bloom', quantity: 2, unitAmount: 5500, total: 11000 }]);
   assert.equal(saved.fulfilment.status, 'manual');
   assert.match(saved.fulfilment.reason, /dawn-bloom/);
 
@@ -224,4 +235,57 @@ test('the floral pen set is in stationery at $13 with its AliExpress id, and the
   assert.deepEqual(p.categories, ['stationery']);
   assert.equal(p.aliexpress.productId, '1005010463038551');
   assert.equal(catalog.products.find((x) => x.id === 'gel-pens-5-pack'), undefined);
+});
+
+// ---------- options (scents) ----------
+test('priceCart needs a valid option for products that have options, and refuses options on others', () => {
+  const candle = catalog.products.find((p) => p.id === 'scented-tin-candle');
+  assert.ok(candle, 'candle product exists');
+  const first = candle.options.values[0];
+  const ok = priceCart(catalog, [{ id: candle.id, option: first.id, qty: 2 }]);
+  assert.equal(ok.lines[0].option.id, first.id);
+  assert.equal(ok.lines[0].unitAmount, candle.price);
+
+  assert.match(priceCart(catalog, [{ id: candle.id, qty: 1 }]).error, /choose a scent/i, 'option is required');
+  assert.ok(priceCart(catalog, [{ id: candle.id, option: 'nope', qty: 1 }]).error, 'unknown option rejected');
+  assert.ok(priceCart(catalog, [{ id: 'dawn-bloom', option: 'lavender', qty: 1 }]).error, 'option not allowed on a product without options');
+  // same product, different scents = two separate lines (fine); same scent twice = rejected
+  const second = candle.options.values[1];
+  assert.equal(priceCart(catalog, [{ id: candle.id, option: first.id, qty: 1 }, { id: candle.id, option: second.id, qty: 1 }]).lines.length, 2);
+  assert.ok(priceCart(catalog, [{ id: candle.id, option: first.id, qty: 1 }, { id: candle.id, option: first.id, qty: 1 }]).error);
+});
+
+test('checkout shows the chosen scent to Stripe and records it for the supplier', async () => {
+  const candle = catalog.products.find((p) => p.id === 'scented-tin-candle');
+  const v = candle.options.values[1];
+  fakeStripe(() => ({ data: { url: 'https://checkout.stripe.com/x' } }));
+  const res = await checkout({ request: post('https://shop.example/api/checkout', { items: [{ id: candle.id, option: v.id, qty: 3 }] }), env: env() });
+  assert.equal(res.status, 200);
+  const f = Object.fromEntries(new URLSearchParams(stripeCalls[0].body));
+  assert.equal(f['line_items[0][price_data][product_data][name]'], `${candle.name} (${v.name})`);
+  assert.equal(f['line_items[0][price_data][product_data][metadata][sku]'], candle.id);
+  assert.equal(f['line_items[0][price_data][product_data][metadata][option]'], v.id);
+  assert.equal(f['line_items[0][price_data][unit_amount]'], String(candle.price));
+  assert.equal(f['line_items[0][quantity]'], '3');
+
+  const missing = await checkout({ request: post('https://shop.example/api/checkout', { items: [{ id: candle.id, qty: 1 }] }), env: env() });
+  assert.equal(missing.status, 400);
+});
+
+test('webhook order keeps the chosen scent and flags a missing AliExpress variant', async () => {
+  const candle = catalog.products.find((p) => p.id === 'scented-tin-candle');
+  const v = candle.options.values[0];
+  const session = {
+    ...paidSession, id: 'cs_test_candle',
+    line_items: { data: [{ description: `${candle.name} (${v.name})`, quantity: 1, amount_total: candle.price, price: { unit_amount: candle.price, product: { metadata: { sku: candle.id, option: v.id } } } }] },
+  };
+  fakeStripe(() => ({ data: session }));
+  const store = kv();
+  const body = JSON.stringify({ id: 'evt_2', type: 'checkout.session.completed', data: { object: { id: 'cs_test_candle' } } });
+  const res = await webhook({ request: post('https://shop.example/api/webhook', body, { 'stripe-signature': sign(body) }), env: env({ ORDERS: store }) });
+  assert.equal(await res.text(), 'OK');
+  const saved = JSON.parse(store.m.get('order:cs_test_candle'));
+  assert.equal(saved.items[0].option, v.id);
+  assert.equal(saved.fulfilment.supplierLines[0].option, v.id);
+  assert.match(saved.fulfilment.reason, new RegExp(`${candle.id}/${v.id}`));
 });

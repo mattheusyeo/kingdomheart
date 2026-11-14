@@ -5,6 +5,7 @@
   --divider: #595959;
   --accent: #ffc800;
   --light: #f7f7f7;
+  --cream: #f5eee0;
   --radius: 30px;
 }
 
@@ -631,7 +632,7 @@ a.g-img:hover img { transform: scale(1.03); }
 .collage-item {
   padding: 0; border: 0; cursor: zoom-in;
   aspect-ratio: 1;
-  background: #f2f2f2;
+  background: var(--cream);
   border-radius: 20px;
   overflow: hidden;
 }
@@ -678,4 +679,35 @@ a.g-img:hover img { transform: scale(1.03); }
   .product-add { width: 100%; }
   .collage { gap: 8px; }
   .collage-item { border-radius: 14px; }
+}
+
+/* ---------- Options (for example scents) ---------- */
+.options { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+.options-label {
+  font-weight: 700; font-size: 14px; letter-spacing: 0.02em; text-transform: uppercase;
+  color: var(--caption);
+}
+.options-chosen { color: var(--headline); }
+.option-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.option {
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 14px 8px 8px;
+  background: var(--cream);               /* cream, not pure white */
+  border: 2px solid transparent; border-radius: 14px;
+  font: inherit; font-weight: 700; font-size: 15px; line-height: 1.25; text-align: left;
+  color: var(--body); cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+.option:hover { border-color: rgba(0, 0, 0, 0.28); }
+.option.is-selected { border-color: var(--headline); }
+.option:focus-visible { outline: 2px solid var(--headline); outline-offset: 2px; }
+.option-thumb { width: 52px; height: 52px; flex: none; border-radius: 10px; object-fit: cover; background: var(--cream); }
+.options-hint { font-size: 14px; color: var(--caption); }
+.options-hint[hidden] { display: none; }
+.cart-option { font-size: 14px; color: var(--caption); }
+.cart-thumb { background: var(--cream); }
+a.g-add { text-decoration: none; }
+
+@media (max-width: 480px) {
+  .option-grid { grid-template-columns: 1fr; }
 }

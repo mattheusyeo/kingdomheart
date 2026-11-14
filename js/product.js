@@ -1,5 +1,6 @@
 // Product page: product.html?id=acrylic-pen-holder
-// Shows a photo collage (click a photo to enlarge it), the description, and "Add to cart".
+// Shows the photo (click it to enlarge), the description, an option picker (for example a scent)
+// when the product has options, and "Add to cart".
 (function () {
   var root = document.getElementById('product-root');
   if (!root) return;
@@ -63,6 +64,8 @@
       ? product.images
       : [{ src: product.image, alt: product.alt || product.name }];
     var openPhoto = makeLightbox();
+    var current = { src: photos[0].src, alt: photos[0].alt || product.name };
+    var mainTile = null, mainImg = null;
     var collage = el('div', 'collage ' + (photos.length >= 5 ? 'collage-5' : 'collage-stack'));
     collage.style.setProperty('--n', String(Math.max(1, photos.length - 1)));
     photos.slice(0, 5).forEach(function (ph, i) {
@@ -73,7 +76,10 @@
       img.src = ph.src; img.alt = ph.alt || product.name;
       if (i > 0) img.loading = 'lazy';
       tile.appendChild(img);
-      tile.addEventListener('click', function () { openPhoto(ph.src, ph.alt || product.name); });
+      if (i === 0) { mainTile = tile; mainImg = img; }
+      tile.addEventListener('click', function () {
+        if (i === 0) openPhoto(current.src, current.alt); else openPhoto(ph.src, ph.alt || product.name);
+      });
       collage.appendChild(tile);
     });
 
@@ -87,12 +93,67 @@
       info.appendChild(el('p', 'product-desc', para));
     });
 
+    var values = (product.options && product.options.values) || [];
+
     var add = el('button', 'button button-lg product-add');
     add.type = 'button';
     add.setAttribute('data-add-to-cart', product.id);
     var dot = el('img'); dot.src = 'assets/dot.svg'; dot.alt = ''; dot.width = 4; dot.height = 4;
     add.appendChild(dot);
     add.appendChild(document.createTextNode('Add to cart'));
+
+    if (values.length) {
+      var noun = product.options.label.toLowerCase();
+      var group = el('div', 'options');
+      var label = el('p', 'options-label', product.options.label);
+      label.id = 'options-label';
+      var chosenName = el('span', 'options-chosen', '');
+      label.appendChild(chosenName);
+      group.appendChild(label);
+
+      var grid = el('div', 'option-grid');
+      grid.setAttribute('role', 'radiogroup');
+      grid.setAttribute('aria-labelledby', 'options-label');
+      var hint = el('p', 'options-hint', 'Choose a ' + noun + ' to add this to your cart.');
+      var buttons = [];
+
+      values.forEach(function (v) {
+        var b = el('button', 'option');
+        b.type = 'button';
+        b.setAttribute('role', 'radio');
+        b.setAttribute('aria-checked', 'false');
+        b.setAttribute('data-option-id', v.id);
+        if (v.thumb || v.image) {
+          var t = el('img', 'option-thumb');
+          t.src = v.thumb || v.image; t.alt = ''; t.width = 52; t.height = 52;
+          b.appendChild(t);
+        }
+        b.appendChild(el('span', 'option-name', v.name));
+        b.addEventListener('click', function () {
+          buttons.forEach(function (x) {
+            var on = x === b;
+            x.setAttribute('aria-checked', on ? 'true' : 'false');
+            x.classList.toggle('is-selected', on);
+          });
+          chosenName.textContent = ': ' + v.name;
+          if (v.image && mainImg) {
+            mainImg.src = v.image;
+            mainImg.alt = v.alt || (product.name + ' \u2013 ' + v.name);
+            current = { src: mainImg.src, alt: mainImg.alt };
+          }
+          add.setAttribute('data-option', v.id);
+          add.disabled = false;
+          hint.hidden = true;
+        });
+        buttons.push(b);
+        grid.appendChild(b);
+      });
+      group.appendChild(grid);
+      group.appendChild(hint);
+      info.appendChild(group);
+      add.disabled = true;   // until a choice is made
+    }
+
     info.appendChild(add);
 
     var ship = catalog.shipping || {};

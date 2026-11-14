@@ -53,12 +53,21 @@
         frame.appendChild(img);
         li.appendChild(frame);
 
-        var add = el('button', 'button g-add');
-        add.type = 'button';
-        add.setAttribute('data-add-to-cart', p.id);
         var dot = el('img'); dot.src = 'assets/dot.svg'; dot.alt = ''; dot.width = 4; dot.height = 4;
-        add.appendChild(dot);
-        add.appendChild(document.createTextNode('Add to cart'));
+        var add;
+        if (p.options && p.options.values && p.options.values.length) {
+          // needs a choice (scent, size...) first, so send the customer to the product page
+          add = el('a', 'button g-add');
+          add.href = href;
+          add.appendChild(dot);
+          add.appendChild(document.createTextNode('Select options'));
+        } else {
+          add = el('button', 'button g-add');
+          add.type = 'button';
+          add.setAttribute('data-add-to-cart', p.id);
+          add.appendChild(dot);
+          add.appendChild(document.createTextNode('Add to cart'));
+        }
         li.appendChild(add);
 
         grid.appendChild(li);

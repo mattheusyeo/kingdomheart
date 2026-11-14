@@ -1,6 +1,7 @@
 // Shopping cart: add to cart on the Gallery page, the cart page, and the hand-off to Stripe.
-// The cart only remembers product ids and quantities. Prices always come from data/products.json
-// for display and are re-checked on the server before anyone is charged.
+// The cart only remembers products (and the chosen option, such as a scent) and quantities.
+// Prices always come from data/products.json for display and are re-checked on the server
+// before anyone is charged. A cart entry is "product-id" or "product-id|option-id".
 (function () {
   var KEY = 'kh-cart';
   var MAX_QTY = 10;
@@ -34,6 +35,13 @@
     write(c);
   }
   function clear() { write({}); }
+
+  // "candle|lavender" -> { id: 'candle', option: 'lavender' }
+  function parseKey(key) {
+    var i = key.indexOf('|');
+    return i === -1 ? { id: key, option: null } : { id: key.slice(0, i), option: key.slice(i + 1) };
+  }
+  function makeKey(id, option) { return option ? id + '|' + option : id; }
 
   function updateBadge() {
     var n = count();
@@ -72,7 +80,7 @@
     var btn = e.target.closest && e.target.closest('[data-add-to-cart]');
     if (!btn) return;
     if (btn._label === undefined) btn._label = btn.lastChild.textContent;
-    add(btn.getAttribute('data-add-to-cart'));
+    add(makeKey(btn.getAttribute('data-add-to-cart'), btn.getAttribute('data-option')));
     btn.lastChild.textContent = 'Added';
     btn.setAttribute('aria-live', 'polite');
     clearTimeout(btn._t);
@@ -91,11 +99,19 @@
       var byId = {};
       catalog.products.forEach(function (p) { byId[p.id] = p; });
       var cart = read();
-      // forget anything that is no longer sold
-      var ids = Object.keys(cart).filter(function (id) { return byId[id]; });
+      // forget anything that is no longer sold (or whose option no longer exists)
+      var optionOf = function (product, optionId) {
+        var values = (product.options && product.options.values) || [];
+        return values.filter(function (v) { return v.id === optionId; })[0] || null;
+      };
+      var ids = Object.keys(cart).filter(function (key) {
+        var k = parseKey(key), product = byId[k.id];
+        if (!product) return false;
+        return product.options ? !!optionOf(product, k.option) : !k.option;
+      });
       if (ids.length !== Object.keys(cart).length) {
         var cleaned = {};
-        ids.forEach(function (id) { cleaned[id] = cart[id]; });
+        ids.forEach(function (key) { cleaned[key] = cart[key]; });
         write(cleaned); cart = cleaned;
       }
 
@@ -117,17 +133,21 @@
       var subtotal = 0;
 
       ids.forEach(function (id) {
-        var p = byId[id], qty = cart[id];
-        subtotal += p.price * qty;
+        var k = parseKey(id);
+        var p = byId[k.id], opt = optionOf(p, k.option), qty = cart[id];
+        var unit = opt && opt.price != null ? opt.price : p.price;
+        subtotal += unit * qty;
+        var label = opt ? p.name + ' (' + opt.name + ')' : p.name;
 
         var row = el('li', 'cart-row');
         var img = el('img', 'cart-thumb');
-        img.src = p.image; img.alt = p.name; img.width = 96; img.height = 96;
+        img.src = (opt && (opt.thumb || opt.image)) || p.image; img.alt = label; img.width = 96; img.height = 96;
         row.appendChild(img);
 
         var info = el('div', 'cart-info');
         info.appendChild(el('p', 'cart-name', p.name));
-        info.appendChild(el('p', 'cart-unit', fmt(p.price)));
+        if (opt) info.appendChild(el('p', 'cart-option', p.options.label + ': ' + opt.name));
+        info.appendChild(el('p', 'cart-unit', fmt(unit)));
         var remove = el('button', 'cart-remove', 'Remove');
         remove.type = 'button';
         remove.addEventListener('click', function () { setQty(id, 0); render(catalog); });
@@ -135,16 +155,16 @@
         row.appendChild(info);
 
         var stepper = el('div', 'qty');
-        var minus = el('button', null, '−'); minus.type = 'button'; minus.setAttribute('aria-label', 'Fewer ' + p.name);
+        var minus = el('button', null, '−'); minus.type = 'button'; minus.setAttribute('aria-label', 'Fewer ' + label);
         var num = el('span', null, String(qty)); num.setAttribute('aria-live', 'polite');
-        var plus = el('button', null, '+'); plus.type = 'button'; plus.setAttribute('aria-label', 'More ' + p.name);
+        var plus = el('button', null, '+'); plus.type = 'button'; plus.setAttribute('aria-label', 'More ' + label);
         plus.disabled = qty >= MAX_QTY;
         minus.addEventListener('click', function () { setQty(id, qty - 1); render(catalog); });
         plus.addEventListener('click', function () { setQty(id, qty + 1); render(catalog); });
         stepper.appendChild(minus); stepper.appendChild(num); stepper.appendChild(plus);
         row.appendChild(stepper);
 
-        row.appendChild(el('p', 'cart-line', fmt(p.price * qty)));
+        row.appendChild(el('p', 'cart-line', fmt(unit * qty)));
         list.appendChild(row);
       });
 
@@ -169,7 +189,11 @@
 
     var checkout = function (button, status) {
       var cart = read();
-      var items = Object.keys(cart).map(function (id) { return { id: id, qty: cart[id] }; });
+      var items = Object.keys(cart).map(function (key) {
+        var k = parseKey(key), item = { id: k.id, qty: cart[key] };
+        if (k.option) item.option = k.option;
+        return item;
+      });
       button.disabled = true;
       var original = button.textContent;
       button.textContent = 'Taking you to payment…';

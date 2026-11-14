@@ -30,11 +30,12 @@ Everything about products and shipping is in **`data/products.json`**, and the G
 - `unit` (optional) adds a suffix on the Gallery, e.g. `Bunch` shows "$55/Bunch".
 - `image` and `alt` are the photo shown in the Gallery and at Stripe checkout, and its description. `tint: true` darkens a photo slightly.
 - `images` (optional) is the list of photos on the product page, as `{ "src", "alt" }`. With five photos they form a collage (one large photo and four close-ups); with fewer they sit in a row under the main photo. Click a photo to enlarge it.
+- `options` (optional) adds a choice the customer must make, such as a scent: `{ "label": "Scent", "values": [ ... ] }`. Each value has an `id`, `name`, a larger `image` (shown as the main photo when chosen) and a small square `thumb` (shown on its card), and may have its own `price` and `aliexpress.skuId` (the AliExpress variant to order). The cart, Stripe checkout and saved orders all keep the chosen option. Option cards and the photo area use the cream colour `--cream` (`#f5eee0`) in `css/styles.css`; scent photos had their white backgrounds recoloured to the same cream.
 - `description` (optional) is a list of paragraphs, and `details` (optional) a list of bullet points, shown on the product page.
 - `labels` is the small heading shown beside each tab's products.
 - `shipping` is the delivery cost (`amount`, in cents, `0` = free) and the delivery time shown to the customer (`minBusinessDays` / `maxBusinessDays`).
 - `allowedCountries` is the list of countries you deliver to.
-- `aliexpress.productId` / `skuId` is the AliExpress product each item is ordered from. `productId` is the long number in the AliExpress link (`aliexpress.com/item/<number>.html`). `skuId` is the chosen variant and is still empty.
+- `aliexpress.productId` / `skuId` is the AliExpress product each item is ordered from (for products with options, put the `skuId` on each option instead). `productId` is the long number in the AliExpress link (`aliexpress.com/item/<number>.html`). `skuId` is the chosen variant and is still empty.
 
 To add a product: save its photo in `assets/`, then add a line to `products` in `data/products.json`.
 

@@ -27,6 +27,7 @@ export function buildOrder(session) {
     },
     items: ((session.line_items && session.line_items.data) || []).map((li) => ({
       sku: (li.price && li.price.product && li.price.product.metadata && li.price.product.metadata.sku) || null,
+      option: (li.price && li.price.product && li.price.product.metadata && li.price.product.metadata.option) || null,
       name: li.description,
       quantity: li.quantity,
       unitAmount: li.price ? li.price.unit_amount : null,
@@ -57,15 +58,27 @@ export async function fulfil(order, catalog, env) {
   const byId = new Map(catalog.products.map((p) => [p.id, p]));
   const supplierLines = order.items.map((item) => {
     const product = byId.get(item.sku);
+    const option = product && product.options && product.options.values.find((v) => v.id === item.option);
     const ali = (product && product.aliexpress) || {};
-    return { sku: item.sku, quantity: item.quantity, aliexpressProductId: ali.productId || null, aliexpressSkuId: ali.skuId || null };
+    const optionAli = (option && option.aliexpress) || {};
+    return {
+      sku: item.sku,
+      option: item.option,
+      quantity: item.quantity,
+      aliexpressProductId: ali.productId || null,
+      aliexpressSkuId: optionAli.skuId || ali.skuId || null,
+    };
   });
-  const missing = supplierLines.filter((l) => !l.aliexpressProductId).map((l) => l.sku);
+  // an item is not ready to order automatically without its AliExpress product (and variant, if it has options)
+  const label = (l) => (l.option ? `${l.sku}/${l.option}` : l.sku);
+  const missing = supplierLines
+    .filter((l) => !l.aliexpressProductId || (l.option && !l.aliexpressSkuId))
+    .map(label);
 
   const fulfilment = {
     status: 'manual',
     reason: missing.length
-      ? `No AliExpress product id saved for: ${missing.join(', ')}`
+      ? `No AliExpress product or variant id saved for: ${missing.join(', ')}`
       : 'AliExpress automatic ordering is not connected yet',
     supplierLines,
   };
