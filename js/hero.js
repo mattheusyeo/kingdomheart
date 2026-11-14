@@ -48,7 +48,11 @@
         }
         var img = el('img');
         img.src = b.wide;
-        if (b.wide2x) { img.srcset = b.wide + ' 1200w, ' + b.wide2x + ' 2400w'; img.sizes = '100vw'; }
+        if (b.wide2x) {
+          img.srcset = b.wide + ' 1200w, ' + b.wide2x + ' 2400w' + (b.wide4k ? ', ' + b.wide4k + ' 3840w' : '');
+          // the banner is the page width minus its margins, and never wider than 1720px
+          img.sizes = '(min-width: 1880px) 1720px, calc(100vw - 160px)';
+        }
         img.alt = b.alt || p.alt || p.name;
         img.decoding = 'async';
         if (i > 0) img.loading = 'eager';
