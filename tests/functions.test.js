@@ -217,3 +217,10 @@ test('buildOrder copes with a session that has no shipping details', () => {
   assert.equal(order.shipping.line1, null);
   assert.deepEqual(order.items, []);
 });
+
+test('the gel pens are in stationery at $13 with their AliExpress id', () => {
+  const p = catalog.products.find((x) => x.id === 'gel-pens-5-pack');
+  assert.equal(p.price, 1300);
+  assert.deepEqual(p.categories, ['stationery']);
+  assert.equal(p.aliexpress.productId, '1005012367079794');
+});
