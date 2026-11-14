@@ -6,6 +6,7 @@ A static website (HTML, CSS, a little JavaScript) with a Stripe Checkout shop.
 | --- | --- |
 | Home | `index.html` |
 | Gallery (Lifestyle / Stationery / Accessories tabs) | `gallery.html` |
+| Product page (opens from the Gallery) | `product.html` |
 | Cart | `cart.html` |
 | Thank-you page after paying | `success.html` |
 
@@ -27,7 +28,9 @@ Everything about products and shipping is in **`data/products.json`**, and the G
 - `price` is in **cents** (`2000` = $20.00).
 - `categories` says which tab shows the product: `lifestyle`, `stationery` and/or `accessories`.
 - `unit` (optional) adds a suffix on the Gallery, e.g. `Bunch` shows "$55/Bunch".
-- `image` and `alt` are the photo and its description. `tint: true` darkens a photo slightly.
+- `image` and `alt` are the photo shown in the Gallery and at Stripe checkout, and its description. `tint: true` darkens a photo slightly.
+- `images` (optional) is the list of photos on the product page, as `{ "src", "alt" }`. With five photos they form a collage (one large photo and four close-ups); with fewer they sit in a row under the main photo. Click a photo to enlarge it.
+- `description` (optional) is a list of paragraphs, and `details` (optional) a list of bullet points, shown on the product page.
 - `labels` is the small heading shown beside each tab's products.
 - `shipping` is the delivery cost (`amount`, in cents, `0` = free) and the delivery time shown to the customer (`minBusinessDays` / `maxBusinessDays`).
 - `allowedCountries` is the list of countries you deliver to.
@@ -78,6 +81,7 @@ index.html, gallery.html, cart.html, success.html   pages
 css/styles.css                                      all styling
 js/menu.js                                          menu dropdown + page fade
 js/gallery.js                                       fills the Gallery page from products.json
+js/product.js                                       product page: collage, description, add to cart
 js/cart.js                                          cart + hand-off to Stripe
 data/products.json                                  products, prices, shipping
 functions/api/checkout.js                           creates the Stripe Checkout session

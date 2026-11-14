@@ -1,6 +1,6 @@
 import { test, beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { createHmac } from 'node:crypto';
 
 import { encodeForm, verifyStripeSignature } from '../functions/_lib/stripe.js';
@@ -63,6 +63,17 @@ test('products.json is well formed', () => {
   }
   for (const c of ['lifestyle', 'stationery', 'accessories']) {
     assert.ok(catalog.products.some((p) => p.categories.includes(c)), `${c} tab would be empty`);
+  }
+});
+
+test('every photo mentioned in products.json exists, and descriptions are lists of text', () => {
+  for (const p of catalog.products) {
+    const files = [p.image, ...(p.images || []).map((i) => i.src)];
+    for (const f of files) assert.ok(existsSync(new URL(`../${f}`, import.meta.url)), `${p.id}: missing file ${f}`);
+    for (const i of p.images || []) assert.ok(i.alt, `${p.id}: photo ${i.src} needs alt text`);
+    for (const key of ['description', 'details']) {
+      if (p[key] !== undefined) assert.ok(Array.isArray(p[key]) && p[key].every((t) => typeof t === 'string' && t.length > 0), `${p.id}.${key}`);
+    }
   }
 });
 

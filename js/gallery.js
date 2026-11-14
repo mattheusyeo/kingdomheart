@@ -34,12 +34,20 @@
       items.forEach(function (p) {
         var li = el('li', 'g-item');
 
+        var href = 'product.html?id=' + encodeURIComponent(p.id);
+
         var info = el('div', 'g-info');
-        info.appendChild(el('p', 'g-name', p.name));
+        var name = el('p', 'g-name');
+        var nameLink = el('a', null, p.name);
+        nameLink.href = href;
+        name.appendChild(nameLink);
+        info.appendChild(name);
         info.appendChild(el('p', 'g-price', price(p.price, p.unit)));
         li.appendChild(info);
 
-        var frame = el('div', p.tint ? 'g-img g-tint' : 'g-img');
+        var frame = el('a', p.tint ? 'g-img g-tint' : 'g-img');
+        frame.href = href;
+        frame.setAttribute('aria-label', 'View ' + p.name);
         var img = el('img');
         img.src = p.image; img.alt = p.alt || p.name; img.loading = 'lazy';
         frame.appendChild(img);
