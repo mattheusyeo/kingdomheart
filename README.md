@@ -31,7 +31,7 @@ Everything about products and shipping is in **`data/products.json`**, and the G
 - `image` and `alt` are the photo shown in the Gallery and at Stripe checkout, and its description. `tint: true` darkens a photo slightly.
 - `images` (optional) is the list of photos on the product page, as `{ "src", "alt" }`. With five photos they form a collage (one large photo and four close-ups); with fewer they sit in a row under the main photo. Click a photo to enlarge it.
 - `options` (optional) adds a choice the customer must make, such as a scent: `{ "label": "Scent", "values": [ ... ] }`. Each value has an `id`, `name`, a larger `image` (shown as the main photo when chosen) and a small square `thumb` (shown on its card), and may have its own `price` and `aliexpress.skuId` (the AliExpress variant to order). The cart, Stripe checkout and saved orders all keep the chosen option. Option cards and the photo area use the cream colour `--cream` (`#f5eee0`) in `css/styles.css`; scent photos had their white backgrounds recoloured to the same cream.
-- `banner` (optional) puts the product in the **home page banner slideshow**: `{ "order": 1, "wide": "...-1200.jpg", "wide2x": "...-2400.jpg", "wide4k": "...-4k.jpg", "square": "...", "alt": "..." }`. `order` sets the slide order. `wide`, `wide2x` and `wide4k` are the same wide photo in the banner's shape (about 2.1 : 1) at 1200, 2400 and 3840 pixels wide, and the browser picks the smallest one that is sharp enough for the screen. `square` is the photo phones use. Products without a `banner` are not shown in it.
+- `banner` (optional) puts the product in the **home page banner slideshow**: `{ "order": 1, "wide": "...-1200.jpg", "wide2x": "...-2400.jpg", "wide4k": "...-4k.jpg", "square": "...", "alt": "..." }`. `order` sets the slide order. `wide`, `wide2x` and `wide4k` are the same wide photo in the banner's shape (about 2.1 : 1) at 1200, 2400 and 3840 pixels wide, and the browser picks the smallest one that is sharp enough for the screen. `square` is a lighter 1000px square photo that phones use. Products without a `banner` are not shown in it.
 - `description` (optional) is a list of paragraphs, and `details` (optional) a list of bullet points, shown on the product page.
 - `labels` is the small heading shown beside each tab's products. Its keys are also the list of valid tabs.
 - `shipping` is the delivery cost (`amount`, in cents, `0` = free) and the delivery time shown to the customer (`minBusinessDays` / `maxBusinessDays`).
@@ -92,3 +92,7 @@ functions/api/webhook.js                            receives Stripe's payment me
 functions/_lib/                                     helpers (Stripe, prices, order saving)
 tests/functions.test.js                             automated tests for the server code
 ```
+
+## About the photo quality
+
+The product, banner and scent photos were enlarged four times with a generative image enlarger (Real-ESRGAN), which sharpens by adding plausible fine detail. It is much clearer than a plain enlargement, but it is still based on small supplier photos, so tiny text and fine patterns are the model's best reconstruction. Replace them with your own photos of the samples when they arrive.
