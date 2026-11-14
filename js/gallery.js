@@ -25,6 +25,14 @@
       var items = catalog.products.filter(function (p) {
         return !category || (p.categories || []).indexOf(category) !== -1;
       });
+      var known = category && catalog.labels && catalog.labels[category];
+      if (items.length === 0 && known) {
+        // a real tab with nothing in it yet
+        var label0 = document.getElementById('collection-label');
+        if (label0) label0.hidden = true;
+        grid.appendChild(el('li', 'g-empty', 'New products are coming soon.'));
+        return;
+      }
       // an unknown ?category= falls back to showing everything
       if (items.length === 0) items = catalog.products;
 

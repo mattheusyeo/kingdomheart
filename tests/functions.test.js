@@ -42,9 +42,9 @@ test('encodeForm nests objects and arrays the way Stripe expects', () => {
 });
 
 test('priceCart accepts a valid cart and rejects bad ones', () => {
-  assert.equal(priceCart(catalog, [{ id: 'dawn-bloom', qty: 2 }]).lines[0].qty, 2);
-  for (const bad of [[], null, [{ id: 'nope', qty: 1 }], [{ id: 'dawn-bloom', qty: 0 }], [{ id: 'dawn-bloom', qty: 11 }],
-    [{ id: 'dawn-bloom', qty: 1.5 }], [{ id: 'dawn-bloom', qty: '2' }], [{ id: 'dawn-bloom', qty: 1 }, { id: 'dawn-bloom', qty: 1 }]]) {
+  assert.equal(priceCart(catalog, [{ id: 'acrylic-pen-holder', qty: 2 }]).lines[0].qty, 2);
+  for (const bad of [[], null, [{ id: 'nope', qty: 1 }], [{ id: 'acrylic-pen-holder', qty: 0 }], [{ id: 'acrylic-pen-holder', qty: 11 }],
+    [{ id: 'acrylic-pen-holder', qty: 1.5 }], [{ id: 'acrylic-pen-holder', qty: '2' }], [{ id: 'acrylic-pen-holder', qty: 1 }, { id: 'acrylic-pen-holder', qty: 1 }]]) {
     assert.ok(priceCart(catalog, bad).error, `should reject ${JSON.stringify(bad)}`);
   }
 });
@@ -72,9 +72,7 @@ test('products.json is well formed', () => {
       for (const f of [v.image, v.thumb].filter(Boolean)) assert.ok(existsSync(new URL(`../${f}`, import.meta.url)), `${p.id}/${v.id}: missing file ${f}`);
     }
   }
-  for (const c of ['lifestyle', 'stationery', 'accessories']) {
-    assert.ok(catalog.products.some((p) => p.categories.includes(c)), `${c} tab would be empty`);
-  }
+  for (const c of Object.keys(catalog.labels)) assert.ok(['lifestyle', 'stationery', 'accessories'].includes(c), `unknown label ${c}`);
 });
 
 test('every photo mentioned in products.json exists, and descriptions are lists of text', () => {
@@ -98,7 +96,7 @@ test('the stationery tab has the pen holder at $20 with its AliExpress id', () =
 // ---------- checkout ----------
 test('checkout builds a Stripe session from SERVER prices, ignoring prices sent by the browser', async () => {
   fakeStripe(() => ({ data: { id: 'cs_test_1', url: 'https://checkout.stripe.com/c/pay/cs_test_1' } }));
-  const res = await checkout({ request: post('https://shop.example/api/checkout', { items: [{ id: 'dawn-bloom', qty: 2, price: 1 }] }), env: env() });
+  const res = await checkout({ request: post('https://shop.example/api/checkout', { items: [{ id: 'acrylic-pen-holder', qty: 2, price: 1 }] }), env: env() });
   assert.equal(res.status, 200);
   assert.deepEqual(await res.json(), { url: 'https://checkout.stripe.com/c/pay/cs_test_1' });
 
@@ -110,10 +108,10 @@ test('checkout builds a Stripe session from SERVER prices, ignoring prices sent 
   assert.equal(f.mode, 'payment');
   assert.equal(f['line_items[0][quantity]'], '2');
   assert.equal(f['line_items[0][price_data][currency]'], 'aud');
-  assert.equal(f['line_items[0][price_data][unit_amount]'], '5500'); // not the 1 the browser sent
-  assert.equal(f['line_items[0][price_data][product_data][name]'], 'Dawn Bloom');
-  assert.equal(f['line_items[0][price_data][product_data][metadata][sku]'], 'dawn-bloom');
-  assert.equal(f['line_items[0][price_data][product_data][images][0]'], 'https://shop.example/assets/gallery-1.jpg');
+  assert.equal(f['line_items[0][price_data][unit_amount]'], '2000'); // not the 1 the browser sent
+  assert.equal(f['line_items[0][price_data][product_data][name]'], 'Acrylic Pen Holder');
+  assert.equal(f['line_items[0][price_data][product_data][metadata][sku]'], 'acrylic-pen-holder');
+  assert.equal(f['line_items[0][price_data][product_data][images][0]'], 'https://shop.example/assets/acrylic-pen-holder.jpg');
   assert.equal(f['shipping_address_collection[allowed_countries][0]'], 'AU');
   assert.equal(f['phone_number_collection[enabled]'], 'true');
   assert.equal(f['shipping_options[0][shipping_rate_data][fixed_amount][currency]'], 'aud');
@@ -124,14 +122,14 @@ test('checkout builds a Stripe session from SERVER prices, ignoring prices sent 
 
 test('checkout leaves product images out on a non-https site (Stripe cannot fetch them)', async () => {
   fakeStripe(() => ({ data: { url: 'https://checkout.stripe.com/x' } }));
-  await checkout({ request: post('http://localhost:8788/api/checkout', { items: [{ id: 'dawn-bloom', qty: 1 }] }), env: env() });
+  await checkout({ request: post('http://localhost:8788/api/checkout', { items: [{ id: 'acrylic-pen-holder', qty: 1 }] }), env: env() });
   const f = Object.fromEntries(new URLSearchParams(stripeCalls[0].body));
   assert.equal(f['line_items[0][price_data][product_data][images][0]'], undefined);
 });
 
 test('checkout rejects bad carts without calling Stripe', async () => {
   fakeStripe(() => ({ data: {} }));
-  for (const body of [{ items: [] }, { items: [{ id: 'nope', qty: 1 }] }, { items: [{ id: 'dawn-bloom', qty: 99 }] }, {}]) {
+  for (const body of [{ items: [] }, { items: [{ id: 'nope', qty: 1 }] }, { items: [{ id: 'acrylic-pen-holder', qty: 99 }] }, {}]) {
     const res = await checkout({ request: post('https://shop.example/api/checkout', body), env: env() });
     assert.equal(res.status, 400, JSON.stringify(body));
   }
@@ -141,11 +139,11 @@ test('checkout rejects bad carts without calling Stripe', async () => {
 });
 
 test('checkout says so when Stripe is not configured, and hides Stripe errors from customers', async () => {
-  const res = await checkout({ request: post('https://shop.example/api/checkout', { items: [{ id: 'dawn-bloom', qty: 1 }] }), env: env({ STRIPE_SECRET_KEY: undefined }) });
+  const res = await checkout({ request: post('https://shop.example/api/checkout', { items: [{ id: 'acrylic-pen-holder', qty: 1 }] }), env: env({ STRIPE_SECRET_KEY: undefined }) });
   assert.equal(res.status, 503);
 
   fakeStripe(() => ({ status: 401, data: { error: { message: 'Invalid API Key provided: sk_test_123' } } }));
-  const bad = await checkout({ request: post('https://shop.example/api/checkout', { items: [{ id: 'dawn-bloom', qty: 1 }] }), env: env() });
+  const bad = await checkout({ request: post('https://shop.example/api/checkout', { items: [{ id: 'acrylic-pen-holder', qty: 1 }] }), env: env() });
   assert.equal(bad.status, 502);
   assert.ok(!(await bad.text()).includes('sk_test'), 'must not leak Stripe error details');
 });
@@ -156,10 +154,10 @@ const sign = (body, secret = 'whsec_test', t = Math.floor(Date.now() / 1000)) =>
 
 const paidSession = {
   id: 'cs_test_paid', object: 'checkout.session', payment_status: 'paid', payment_intent: 'pi_1', created: 1700000000,
-  currency: 'aud', amount_total: 11000, total_details: { amount_shipping: 0 },
+  currency: 'aud', amount_total: 4000, total_details: { amount_shipping: 0 },
   customer_details: { email: 'buyer@example.com', name: 'Sam Buyer', phone: '+61400000000' },
   shipping_details: { name: 'Sam Buyer', address: { line1: '1 George St', line2: null, city: 'Sydney', state: 'NSW', postal_code: '2000', country: 'AU' } },
-  line_items: { data: [{ description: 'Dawn Bloom', quantity: 2, amount_total: 11000, price: { unit_amount: 5500, product: { metadata: { sku: 'dawn-bloom' } } } }] },
+  line_items: { data: [{ description: 'Acrylic Pen Holder', quantity: 2, amount_total: 4000, price: { unit_amount: 2000, product: { metadata: { sku: 'acrylic-pen-holder' } } } }] },
 };
 const event = (type = 'checkout.session.completed') => JSON.stringify({ id: 'evt_1', type, data: { object: { id: 'cs_test_paid' } } });
 const kv = () => { const m = new Map(); return { m, get: async (k) => m.get(k) ?? null, put: async (k, v) => { m.set(k, v); } }; };
@@ -198,9 +196,10 @@ test('webhook turns a paid session into a saved order, and only once', async () 
   const saved = JSON.parse(store.m.get('order:cs_test_paid'));
   assert.equal(saved.customer.email, 'buyer@example.com');
   assert.equal(saved.shipping.postalCode, '2000');
-  assert.deepEqual(saved.items, [{ sku: 'dawn-bloom', option: null, name: 'Dawn Bloom', quantity: 2, unitAmount: 5500, total: 11000 }]);
+  assert.deepEqual(saved.items, [{ sku: 'acrylic-pen-holder', option: null, name: 'Acrylic Pen Holder', quantity: 2, unitAmount: 2000, total: 4000 }]);
   assert.equal(saved.fulfilment.status, 'manual');
-  assert.match(saved.fulfilment.reason, /dawn-bloom/);
+  assert.match(saved.fulfilment.reason, /not connected yet/);
+  assert.equal(saved.fulfilment.supplierLines[0].aliexpressProductId, '1005013160170720');
 
   const again = await webhook({ request: req(), env: env({ ORDERS: store }) });
   assert.equal(await again.text(), 'Already processed');
@@ -248,7 +247,7 @@ test('priceCart needs a valid option for products that have options, and refuses
 
   assert.match(priceCart(catalog, [{ id: candle.id, qty: 1 }]).error, /choose a scent/i, 'option is required');
   assert.ok(priceCart(catalog, [{ id: candle.id, option: 'nope', qty: 1 }]).error, 'unknown option rejected');
-  assert.ok(priceCart(catalog, [{ id: 'dawn-bloom', option: 'lavender', qty: 1 }]).error, 'option not allowed on a product without options');
+  assert.ok(priceCart(catalog, [{ id: 'acrylic-pen-holder', option: 'lavender', qty: 1 }]).error, 'option not allowed on a product without options');
   // same product, different scents = two separate lines (fine); same scent twice = rejected
   const second = candle.options.values[1];
   assert.equal(priceCart(catalog, [{ id: candle.id, option: first.id, qty: 1 }, { id: candle.id, option: second.id, qty: 1 }]).lines.length, 2);
@@ -288,4 +287,9 @@ test('webhook order keeps the chosen scent and flags a missing AliExpress varian
   assert.equal(saved.items[0].option, v.id);
   assert.equal(saved.fulfilment.supplierLines[0].option, v.id);
   assert.match(saved.fulfilment.reason, new RegExp(`${candle.id}/${v.id}`));
+});
+
+test('the placeholder flowers are gone', () => {
+  assert.equal(catalog.products.some((p) => p.unit === 'Bunch'), false);
+  assert.deepEqual(catalog.products.map((p) => p.id).sort(), ['acrylic-pen-holder', 'floral-pen-set', 'scented-tin-candle']);
 });

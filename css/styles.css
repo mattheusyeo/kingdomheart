@@ -711,3 +711,6 @@ a.g-add { text-decoration: none; }
 @media (max-width: 480px) {
   .option-grid { grid-template-columns: 1fr; }
 }
+
+.g-empty { grid-column: 1 / -1; font-size: 20px; line-height: 1.4; color: var(--body); }
+.g-label[hidden] { display: none; }
