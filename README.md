@@ -31,6 +31,7 @@ Everything about products and shipping is in **`data/products.json`**, and the G
 - `image` and `alt` are the photo shown in the Gallery and at Stripe checkout, and its description. `tint: true` darkens a photo slightly.
 - `images` (optional) is the list of photos on the product page, as `{ "src", "alt" }`. With five photos they form a collage (one large photo and four close-ups); with fewer they sit in a row under the main photo. Click a photo to enlarge it.
 - `options` (optional) adds a choice the customer must make, such as a scent: `{ "label": "Scent", "values": [ ... ] }`. Each value has an `id`, `name`, a larger `image` (shown as the main photo when chosen) and a small square `thumb` (shown on its card), and may have its own `price` and `aliexpress.skuId` (the AliExpress variant to order). The cart, Stripe checkout and saved orders all keep the chosen option. Option cards and the photo area use the cream colour `--cream` (`#f5eee0`) in `css/styles.css`; scent photos had their white backgrounds recoloured to the same cream.
+- `banner` (optional) puts the product in the **home page banner slideshow**: `{ "order": 1, "wide": "...-1200.jpg", "wide2x": "...-2400.jpg", "square": "...", "alt": "..." }`. `order` sets the slide order. `wide` and `wide2x` are wide photos in the banner's shape (about 2.1 : 1; the 2400px one is for high-resolution screens), and `square` is the photo phones use. Products without a `banner` are not shown in it.
 - `description` (optional) is a list of paragraphs, and `details` (optional) a list of bullet points, shown on the product page.
 - `labels` is the small heading shown beside each tab's products. Its keys are also the list of valid tabs.
 - `shipping` is the delivery cost (`amount`, in cents, `0` = free) and the delivery time shown to the customer (`minBusinessDays` / `maxBusinessDays`).
@@ -82,6 +83,7 @@ index.html, gallery.html, cart.html, success.html   pages
 css/styles.css                                      all styling
 js/menu.js                                          menu dropdown + page fade
 js/gallery.js                                       fills the Gallery page from products.json
+js/hero.js                                          home page banner slideshow
 js/product.js                                       product page: collage, description, add to cart
 js/cart.js                                          cart + hand-off to Stripe
 data/products.json                                  products, prices, shipping

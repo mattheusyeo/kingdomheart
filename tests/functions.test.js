@@ -293,3 +293,14 @@ test('the placeholder flowers are gone', () => {
   assert.equal(catalog.products.some((p) => p.unit === 'Bunch'), false);
   assert.deepEqual(catalog.products.map((p) => p.id).sort(), ['acrylic-pen-holder', 'floral-pen-set', 'scented-tin-candle']);
 });
+
+test('home page banner: every banner photo exists and the order is candle, floral pens, pen holder', () => {
+  const withBanner = catalog.products.filter((p) => p.banner).sort((a, b) => a.banner.order - b.banner.order);
+  assert.deepEqual(withBanner.map((p) => p.id), ['scented-tin-candle', 'floral-pen-set', 'acrylic-pen-holder']);
+  for (const p of withBanner) {
+    for (const f of [p.banner.wide, p.banner.wide2x, p.banner.square]) {
+      assert.ok(existsSync(new URL(`../${f}`, import.meta.url)), `${p.id}: missing banner file ${f}`);
+    }
+    assert.ok(p.banner.alt, `${p.id}: banner needs alt text`);
+  }
+});

@@ -30,16 +30,14 @@
   </header>
 
   <header class="header" id="top">
-    <div class="hero">
-      <img class="hero-img" src="assets/hero.jpg" alt="Rose">
-      <div class="sticker">
-        <img class="sticker-outline" src="assets/badge-outline.svg" alt="Special offer badge">
-        <div class="sticker-text">
-          <p class="sticker-label">New</p>
-          <p class="sticker-offer">10% Off Your First Order</p>
-          <p class="sticker-label sticker-label-sm">Special</p>
-        </div>
+    <div class="hero" id="hero" role="region" aria-roledescription="carousel" aria-label="Featured products">
+      <div class="hero-slides" id="hero-slides">
+        <!-- js/hero.js builds the full slideshow from data/products.json; this first slide shows if scripts are off -->
+        <a class="hero-slide is-active" href="product.html?id=scented-tin-candle">
+          <img src="assets/banner-candle-1200.jpg" alt="Colourful mandala-pattern scented candle tins and gift boxes">
+        </a>
       </div>
+      <div class="hero-dots" id="hero-dots"></div>
     </div>
   </header>
 
@@ -123,6 +121,7 @@
   </footer>
 
   <script src="js/cart.js"></script>
+  <script src="js/hero.js"></script>
   <script src="js/menu.js"></script>
 </body>
 </html>
