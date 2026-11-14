@@ -58,7 +58,19 @@ test('products.json is well formed', () => {
     assert.ok(Number.isInteger(p.price) && p.price > 0, `${p.id} price must be whole cents`);
     assert.ok(!ids.has(p.id), `${p.id} duplicated`);
     ids.add(p.id);
+    assert.ok(p.categories.length > 0 && p.categories.every((c) => ['lifestyle', 'stationery', 'accessories'].includes(c)), `${p.id} needs valid categories`);
+    assert.ok(p.alt && p.image, `${p.id} needs an image and alt text`);
   }
+  for (const c of ['lifestyle', 'stationery', 'accessories']) {
+    assert.ok(catalog.products.some((p) => p.categories.includes(c)), `${c} tab would be empty`);
+  }
+});
+
+test('the stationery tab has the pen holder at $20 with its AliExpress id', () => {
+  const p = catalog.products.find((x) => x.id === 'acrylic-pen-holder');
+  assert.equal(p.price, 2000);
+  assert.deepEqual(p.categories, ['stationery']);
+  assert.equal(p.aliexpress.productId, '1005013160170720');
 });
 
 // ---------- checkout ----------

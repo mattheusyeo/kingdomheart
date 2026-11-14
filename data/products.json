@@ -1,21 +1,29 @@
 {
   "currency": "aud",
-  "allowedCountries": ["AU"],
+  "allowedCountries": [
+    "AU"
+  ],
   "shipping": {
     "label": "Standard shipping",
     "amount": 0,
     "minBusinessDays": 10,
     "maxBusinessDays": 25
   },
+  "labels": {
+    "lifestyle": "Seasonal arrangements",
+    "stationery": "Desk essentials",
+    "accessories": "Seasonal arrangements"
+  },
   "products": [
-    { "id": "dawn-bloom",     "name": "Dawn Bloom",     "price": 5500,  "image": "assets/gallery-1.jpg",  "aliexpress": { "productId": null, "skuId": null } },
-    { "id": "solstice-stems", "name": "Solstice Stems", "price": 3000,  "image": "assets/gallery-2.jpg",  "aliexpress": { "productId": null, "skuId": null } },
-    { "id": "whisper-greens", "name": "Whisper Greens", "price": 12000, "image": "assets/gallery-3.jpg",  "aliexpress": { "productId": null, "skuId": null } },
-    { "id": "clarity-petals", "name": "Clarity Petals", "price": 5500,  "image": "assets/carousel-3.jpg", "aliexpress": { "productId": null, "skuId": null } },
-    { "id": "river-stone",    "name": "River Stone",    "price": 3000,  "image": "assets/carousel-1.jpg", "aliexpress": { "productId": null, "skuId": null } },
-    { "id": "moonlit-meadow", "name": "Moonlit Meadow", "price": 12000, "image": "assets/gallery-2.jpg",  "aliexpress": { "productId": null, "skuId": null } },
-    { "id": "ember-leaf",     "name": "Ember Leaf",     "price": 5500,  "image": "assets/carousel-4.jpg", "aliexpress": { "productId": null, "skuId": null } },
-    { "id": "skyline-bloom",  "name": "Skyline Bloom",  "price": 7500,  "image": "assets/gallery-4.jpg",  "aliexpress": { "productId": null, "skuId": null } },
-    { "id": "still-waters",   "name": "Still Waters",   "price": 25000, "image": "assets/service-3.jpg",  "aliexpress": { "productId": null, "skuId": null } }
+    {"id": "acrylic-pen-holder", "name": "Acrylic Pen Holder", "price": 2000, "categories": ["stationery"], "image": "assets/acrylic-pen-holder.jpg", "alt": "Clear acrylic pen holder with two compartments, holding pens and stationery", "aliexpress": {"productId": "1005013160170720", "skuId": null}},
+    {"id": "dawn-bloom", "name": "Dawn Bloom", "price": 5500, "categories": ["lifestyle", "accessories"], "unit": "Bunch", "image": "assets/gallery-1.jpg", "alt": "Sun flowers", "aliexpress": {"productId": null, "skuId": null}},
+    {"id": "solstice-stems", "name": "Solstice Stems", "price": 3000, "categories": ["lifestyle", "accessories"], "unit": "Bunch", "image": "assets/gallery-2.jpg", "alt": "Bouquette of lilies and carnations", "aliexpress": {"productId": null, "skuId": null}},
+    {"id": "whisper-greens", "name": "Whisper Greens", "price": 12000, "categories": ["lifestyle", "accessories"], "unit": "Bunch", "image": "assets/gallery-3.jpg", "alt": "Bouquette of tulips", "aliexpress": {"productId": null, "skuId": null}},
+    {"id": "clarity-petals", "name": "Clarity Petals", "price": 5500, "categories": ["lifestyle", "accessories"], "unit": "Bunch", "image": "assets/carousel-3.jpg", "alt": "Pink flowers", "aliexpress": {"productId": null, "skuId": null}},
+    {"id": "river-stone", "name": "River Stone", "price": 3000, "categories": ["lifestyle", "accessories"], "unit": "Bunch", "image": "assets/carousel-1.jpg", "alt": "Bouquette of peonies", "aliexpress": {"productId": null, "skuId": null}},
+    {"id": "moonlit-meadow", "name": "Moonlit Meadow", "price": 12000, "categories": ["lifestyle", "accessories"], "unit": "Bunch", "image": "assets/gallery-2.jpg", "alt": "Bouquette of lilies and carnations", "aliexpress": {"productId": null, "skuId": null}},
+    {"id": "ember-leaf", "name": "Ember Leaf", "price": 5500, "categories": ["lifestyle", "accessories"], "unit": "Bunch", "image": "assets/carousel-4.jpg", "alt": "White tulips", "aliexpress": {"productId": null, "skuId": null}},
+    {"id": "skyline-bloom", "name": "Skyline Bloom", "price": 7500, "categories": ["lifestyle", "accessories"], "unit": "Bunch", "image": "assets/gallery-4.jpg", "alt": "Purple flower", "aliexpress": {"productId": null, "skuId": null}},
+    {"id": "still-waters", "name": "Still Waters", "price": 25000, "categories": ["lifestyle", "accessories"], "unit": "Bunch", "image": "assets/service-3.jpg", "alt": "Pink tulip", "tint": true, "aliexpress": {"productId": null, "skuId": null}}
   ]
 }

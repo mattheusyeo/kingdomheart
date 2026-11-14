@@ -35,54 +35,8 @@
 
   <main>
     <section class="g-section g-collection">
-      <h2 class="g-label">Seasonal arrangements</h2>
-      <ul class="g-grid">
-        <li class="g-item">
-          <div class="g-info"><p class="g-name">Dawn Bloom</p><p class="g-price">$55/Bunch</p></div>
-          <div class="g-img"><img src="assets/gallery-1.jpg" alt="Sun flowers" loading="lazy"></div>
-          <button class="button g-add" type="button" data-add-to-cart="dawn-bloom"><img src="assets/dot.svg" alt="" width="4" height="4">Add to cart</button>
-        </li>
-        <li class="g-item">
-          <div class="g-info"><p class="g-name">Solstice Stems</p><p class="g-price">$30/Bunch</p></div>
-          <div class="g-img"><img src="assets/gallery-2.jpg" alt="Bouquette of lilies and carnations" loading="lazy"></div>
-          <button class="button g-add" type="button" data-add-to-cart="solstice-stems"><img src="assets/dot.svg" alt="" width="4" height="4">Add to cart</button>
-        </li>
-        <li class="g-item">
-          <div class="g-info"><p class="g-name">Whisper Greens</p><p class="g-price">$120/Bunch</p></div>
-          <div class="g-img"><img src="assets/gallery-3.jpg" alt="Bouquette of tulips" loading="lazy"></div>
-          <button class="button g-add" type="button" data-add-to-cart="whisper-greens"><img src="assets/dot.svg" alt="" width="4" height="4">Add to cart</button>
-        </li>
-        <li class="g-item">
-          <div class="g-info"><p class="g-name">Clarity Petals</p><p class="g-price">$55/Bunch</p></div>
-          <div class="g-img"><img src="assets/carousel-3.jpg" alt="Pink flowers" loading="lazy"></div>
-          <button class="button g-add" type="button" data-add-to-cart="clarity-petals"><img src="assets/dot.svg" alt="" width="4" height="4">Add to cart</button>
-        </li>
-        <li class="g-item">
-          <div class="g-info"><p class="g-name">River Stone</p><p class="g-price">$30/Bunch</p></div>
-          <div class="g-img"><img src="assets/carousel-1.jpg" alt="Bouquette of peonies" loading="lazy"></div>
-          <button class="button g-add" type="button" data-add-to-cart="river-stone"><img src="assets/dot.svg" alt="" width="4" height="4">Add to cart</button>
-        </li>
-        <li class="g-item">
-          <div class="g-info"><p class="g-name">Moonlit Meadow</p><p class="g-price">$120/Bunch</p></div>
-          <div class="g-img"><img src="assets/gallery-2.jpg" alt="Bouquette of lilies and carnations" loading="lazy"></div>
-          <button class="button g-add" type="button" data-add-to-cart="moonlit-meadow"><img src="assets/dot.svg" alt="" width="4" height="4">Add to cart</button>
-        </li>
-        <li class="g-item">
-          <div class="g-info"><p class="g-name">Ember Leaf</p><p class="g-price">$55/Bunch</p></div>
-          <div class="g-img"><img src="assets/carousel-4.jpg" alt="White tulips" loading="lazy"></div>
-          <button class="button g-add" type="button" data-add-to-cart="ember-leaf"><img src="assets/dot.svg" alt="" width="4" height="4">Add to cart</button>
-        </li>
-        <li class="g-item">
-          <div class="g-info"><p class="g-name">Skyline Bloom</p><p class="g-price">$75/Bunch</p></div>
-          <div class="g-img"><img src="assets/gallery-4.jpg" alt="Purple flower" loading="lazy"></div>
-          <button class="button g-add" type="button" data-add-to-cart="skyline-bloom"><img src="assets/dot.svg" alt="" width="4" height="4">Add to cart</button>
-        </li>
-        <li class="g-item">
-          <div class="g-info"><p class="g-name">Still Waters</p><p class="g-price">$250/Bunch</p></div>
-          <div class="g-img g-tint"><img src="assets/service-3.jpg" alt="Pink tulip" loading="lazy"></div>
-          <button class="button g-add" type="button" data-add-to-cart="still-waters"><img src="assets/dot.svg" alt="" width="4" height="4">Add to cart</button>
-        </li>
-      </ul>
+      <h2 class="g-label" id="collection-label">Seasonal arrangements</h2>
+      <ul class="g-grid" id="product-grid" aria-live="polite"></ul>
     </section>
 
     <section class="g-section g-services">
@@ -135,6 +89,7 @@
   </footer>
 
   <script src="js/cart.js"></script>
+  <script src="js/gallery.js"></script>
   <script src="js/menu.js"></script>
 </body>
 </html>

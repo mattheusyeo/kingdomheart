@@ -67,16 +67,16 @@
     return node;
   }
 
-  /* ---------- Gallery page: "Add to cart" buttons ---------- */
-  document.querySelectorAll('[data-add-to-cart]').forEach(function (btn) {
-    var label = btn.lastChild.textContent;
-    btn.addEventListener('click', function () {
-      add(btn.getAttribute('data-add-to-cart'));
-      btn.lastChild.textContent = 'Added';
-      btn.setAttribute('aria-live', 'polite');
-      clearTimeout(btn._t);
-      btn._t = setTimeout(function () { btn.lastChild.textContent = label; }, 1400);
-    });
+  /* ---------- Gallery page: "Add to cart" buttons (created by gallery.js, so listen on the page) ---------- */
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest && e.target.closest('[data-add-to-cart]');
+    if (!btn) return;
+    if (btn._label === undefined) btn._label = btn.lastChild.textContent;
+    add(btn.getAttribute('data-add-to-cart'));
+    btn.lastChild.textContent = 'Added';
+    btn.setAttribute('aria-live', 'polite');
+    clearTimeout(btn._t);
+    btn._t = setTimeout(function () { btn.lastChild.textContent = btn._label; }, 1400);
   });
 
   /* ---------- Cart page ---------- */

@@ -22,16 +22,20 @@ Everything is in Australian dollars (AUD) and deliveries are limited to Australi
 
 ## Things you edit
 
-Everything about products and shipping is in **`data/products.json`**:
+Everything about products and shipping is in **`data/products.json`**, and the Gallery page is built from it, so a price only ever needs changing in one place:
 
-- `price` is in **cents** (`5500` = $55.00).
+- `price` is in **cents** (`2000` = $20.00).
+- `categories` says which tab shows the product: `lifestyle`, `stationery` and/or `accessories`.
+- `unit` (optional) adds a suffix on the Gallery, e.g. `Bunch` shows "$55/Bunch".
+- `image` and `alt` are the photo and its description. `tint: true` darkens a photo slightly.
+- `labels` is the small heading shown beside each tab's products.
 - `shipping` is the delivery cost (`amount`, in cents, `0` = free) and the delivery time shown to the customer (`minBusinessDays` / `maxBusinessDays`).
 - `allowedCountries` is the list of countries you deliver to.
-- `aliexpress.productId` / `skuId` is the AliExpress product each item is ordered from (empty for now).
+- `aliexpress.productId` / `skuId` is the AliExpress product each item is ordered from. `productId` is the long number in the AliExpress link (`aliexpress.com/item/<number>.html`). `skuId` is the chosen variant and is still empty.
 
-The prices shown on `gallery.html` are typed into the page, so when you change a price in `products.json`, change it there too. The product ids in `products.json` must match the `data-add-to-cart` ids in `gallery.html`.
+To add a product: save its photo in `assets/`, then add a line to `products` in `data/products.json`.
 
-> The nine products in the gallery are still the **template's placeholder flowers**. Replace them with your real products before taking real payments.
+> **Real vs placeholder:** the **Acrylic Pen Holder** (Stationery) is a real product. The nine flower items under Lifestyle and Accessories are still the template's **placeholders** with no supplier. Replace them before taking real payments, or customers could buy things you cannot supply.
 
 ## Setting up Stripe (test mode first)
 
@@ -73,6 +77,7 @@ To place AliExpress orders automatically you need an approved app on the **AliEx
 index.html, gallery.html, cart.html, success.html   pages
 css/styles.css                                      all styling
 js/menu.js                                          menu dropdown + page fade
+js/gallery.js                                       fills the Gallery page from products.json
 js/cart.js                                          cart + hand-off to Stripe
 data/products.json                                  products, prices, shipping
 functions/api/checkout.js                           creates the Stripe Checkout session
