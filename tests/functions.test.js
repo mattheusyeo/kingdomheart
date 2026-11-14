@@ -218,9 +218,10 @@ test('buildOrder copes with a session that has no shipping details', () => {
   assert.deepEqual(order.items, []);
 });
 
-test('the gel pens are in stationery at $13 with their AliExpress id', () => {
-  const p = catalog.products.find((x) => x.id === 'gel-pens-5-pack');
+test('the floral pen set is in stationery at $13 with its AliExpress id, and the old gel pens are gone', () => {
+  const p = catalog.products.find((x) => x.id === 'floral-pen-set');
   assert.equal(p.price, 1300);
   assert.deepEqual(p.categories, ['stationery']);
-  assert.equal(p.aliexpress.productId, '1005012367079794');
+  assert.equal(p.aliexpress.productId, '1005010463038551');
+  assert.equal(catalog.products.find((x) => x.id === 'gel-pens-5-pack'), undefined);
 });
