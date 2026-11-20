@@ -22,8 +22,7 @@
     return '$' + (Number.isInteger(d) ? d : d.toFixed(2));
   }
 
-  fetch('data/products.json')
-    .then(function (r) { if (!r.ok) throw new Error('products'); return r.json(); })
+  window.khLoadCatalog()
     .then(function (catalog) {
       var products = catalog.products.filter(function (p) { return p.banner && p.banner.wide; })
         .sort(function (a, b) { return (a.banner.order || 99) - (b.banner.order || 99); });

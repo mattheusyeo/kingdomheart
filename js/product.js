@@ -74,7 +74,8 @@
       tile.setAttribute('aria-label', 'Enlarge photo ' + (i + 1) + ' of ' + Math.min(photos.length, 5));
       var img = el('img');
       img.src = ph.src; img.alt = ph.alt || product.name;
-      if (i > 0) img.loading = 'lazy';
+      img.decoding = 'async';
+      window.khFadeIn(img);
       tile.appendChild(img);
       if (i === 0) { mainTile = tile; mainImg = img; }
       tile.addEventListener('click', function () {
@@ -137,9 +138,11 @@
           });
           chosenName.textContent = ': ' + v.name;
           if (v.image && mainImg) {
+            mainImg.classList.remove('is-loaded');
             mainImg.src = v.image;
             mainImg.alt = v.alt || (product.name + ' \u2013 ' + v.name);
             current = { src: mainImg.src, alt: mainImg.alt };
+            window.khFadeIn(mainImg);
           }
           add.setAttribute('data-option', v.id);
           add.disabled = false;
@@ -148,6 +151,8 @@
         buttons.push(b);
         grid.appendChild(b);
       });
+      // fetch the other photos quietly so choosing an option swaps instantly
+      setTimeout(function () { values.forEach(function (v) { if (v.image) { var pre = new Image(); pre.src = v.image; } }); }, 400);
       group.appendChild(grid);
       group.appendChild(hint);
       info.appendChild(group);
@@ -172,8 +177,7 @@
     root.appendChild(info);
   }
 
-  fetch('data/products.json')
-    .then(function (r) { if (!r.ok) throw new Error('products'); return r.json(); })
+  window.khLoadCatalog()
     .then(render)
     .catch(function () {
       root.textContent = '';

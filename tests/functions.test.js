@@ -86,9 +86,9 @@ test('every photo mentioned in products.json exists, and descriptions are lists 
   }
 });
 
-test('the stationery tab has the pen holder at $20 with its AliExpress id', () => {
+test('the stationery tab has the pen holder at $22 with its AliExpress id', () => {
   const p = catalog.products.find((x) => x.id === 'acrylic-pen-holder');
-  assert.equal(p.price, 2000);
+  assert.equal(p.price, 2200);
   assert.deepEqual(p.categories, ['stationery']);
   assert.equal(p.aliexpress.productId, '1005013160170720');
 });
@@ -108,7 +108,7 @@ test('checkout builds a Stripe session from SERVER prices, ignoring prices sent 
   assert.equal(f.mode, 'payment');
   assert.equal(f['line_items[0][quantity]'], '2');
   assert.equal(f['line_items[0][price_data][currency]'], 'aud');
-  assert.equal(f['line_items[0][price_data][unit_amount]'], '2000'); // not the 1 the browser sent
+  assert.equal(f['line_items[0][price_data][unit_amount]'], '2200'); // not the 1 the browser sent
   assert.equal(f['line_items[0][price_data][product_data][name]'], 'Acrylic Pen Holder');
   assert.equal(f['line_items[0][price_data][product_data][metadata][sku]'], 'acrylic-pen-holder');
   assert.equal(f['line_items[0][price_data][product_data][images][0]'], 'https://shop.example/assets/acrylic-pen-holder.jpg');

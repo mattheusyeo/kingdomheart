@@ -19,9 +19,9 @@
     return unit ? text + '/' + unit : text;
   }
 
-  fetch('data/products.json')
-    .then(function (r) { if (!r.ok) throw new Error('products'); return r.json(); })
+  window.khLoadCatalog()
     .then(function (catalog) {
+      grid.textContent = '';                       // remove the placeholder card
       var items = catalog.products.filter(function (p) {
         return !category || (p.categories || []).indexOf(category) !== -1;
       });
@@ -37,7 +37,7 @@
       if (items.length === 0) items = catalog.products;
 
       var label = document.getElementById('collection-label');
-      if (label && catalog.labels && catalog.labels[category]) label.textContent = catalog.labels[category];
+      if (label && catalog.labels && catalog.labels[category]) { label.textContent = catalog.labels[category]; label.classList.add('is-ready'); }
 
       items.forEach(function (p) {
         var li = el('li', 'g-item');
@@ -57,7 +57,9 @@
         frame.href = href;
         frame.setAttribute('aria-label', 'View ' + p.name);
         var img = el('img');
-        img.src = p.image; img.alt = p.alt || p.name; img.loading = 'lazy';
+        img.alt = p.alt || p.name; img.decoding = 'async';
+        img.src = p.image;
+        window.khFadeIn(img);
         frame.appendChild(img);
         li.appendChild(frame);
 

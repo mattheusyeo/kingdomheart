@@ -60,10 +60,7 @@
   var catalogPromise;
   function loadCatalog() {
     if (!catalogPromise) {
-      catalogPromise = fetch('data/products.json').then(function (r) {
-        if (!r.ok) throw new Error('catalog');
-        return r.json();
-      });
+      catalogPromise = window.khLoadCatalog();
     }
     return catalogPromise;
   }

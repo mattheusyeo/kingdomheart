@@ -719,3 +719,25 @@ a.g-add { text-decoration: none; }
   .hero-slide, .hero-slide .hero-caption { transition: none; }
   .hero-slide.is-active .hero-caption { transition-delay: 0s; }
 }
+
+/* ---------- Smooth loading ---------- */
+.fade-img { opacity: 0; transition: opacity 0.45s ease; }
+.fade-img.is-loaded { opacity: 1; }
+.g-img { background: var(--cream); }
+.g-grid { min-height: 420px; }
+.g-label { opacity: 0; transition: opacity 0.3s ease; }
+.g-label.is-ready { opacity: 1; }
+
+/* placeholders: the same shapes as the real content, so nothing jumps when it arrives */
+.skel-line, .skel-photo, .g-skel .g-img { background: var(--cream); animation: skel-pulse 1.4s ease-in-out infinite; }
+.skel-line { display: block; height: 18px; width: 70%; border-radius: 9px; }
+.skel-title { height: 44px; width: 90%; border-radius: 12px; }
+.skel-short { width: 30%; height: 26px; }
+.skel-photo { aspect-ratio: 1; border-radius: var(--radius); }
+.g-skel .g-info .skel-line { width: 55%; height: 20px; }
+@keyframes skel-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-img, .g-label { transition: none; }
+  .skel-line, .skel-photo, .g-skel .g-img { animation: none; }
+}

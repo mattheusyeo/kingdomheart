@@ -35,8 +35,13 @@
 
   <main>
     <section class="g-section g-collection">
-      <h2 class="g-label" id="collection-label">Seasonal arrangements</h2>
-      <ul class="g-grid" id="product-grid" aria-live="polite"></ul>
+      <h2 class="g-label" id="collection-label"></h2>
+      <ul class="g-grid" id="product-grid" aria-live="polite">
+        <li class="g-item g-skel" aria-hidden="true">
+          <div class="g-info"><span class="skel-line"></span></div>
+          <div class="g-img"></div>
+        </li>
+      </ul>
     </section>
 
     <section class="g-section g-services">
@@ -88,6 +93,7 @@
     </div>
   </footer>
 
+  <script src="js/catalog.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/gallery.js"></script>
   <script src="js/menu.js"></script>
