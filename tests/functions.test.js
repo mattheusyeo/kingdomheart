@@ -90,7 +90,7 @@ test('the stationery tab has the pen holder at $22 with its AliExpress id', () =
   const p = catalog.products.find((x) => x.id === 'acrylic-pen-holder');
   assert.equal(p.price, 2200);
   assert.deepEqual(p.categories, ['stationery']);
-  assert.equal(p.aliexpress.productId, '1005013160170720');
+  assert.equal(p.aliexpress.productId, '1005009000500891');
 });
 
 // ---------- checkout ----------
@@ -199,7 +199,7 @@ test('webhook turns a paid session into a saved order, and only once', async () 
   assert.deepEqual(saved.items, [{ sku: 'acrylic-pen-holder', option: null, name: 'Acrylic Pen Holder', quantity: 2, unitAmount: 2000, total: 4000 }]);
   assert.equal(saved.fulfilment.status, 'manual');
   assert.match(saved.fulfilment.reason, /not connected yet/);
-  assert.equal(saved.fulfilment.supplierLines[0].aliexpressProductId, '1005013160170720');
+  assert.equal(saved.fulfilment.supplierLines[0].aliexpressProductId, '1005009000500891');
 
   const again = await webhook({ request: req(), env: env({ ORDERS: store }) });
   assert.equal(await again.text(), 'Already processed');
